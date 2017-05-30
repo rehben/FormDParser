@@ -1,0 +1,51 @@
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+text = urlopen('https://www.sec.gov/Archives/edgar/data/1476719/000147671914000002/xslFormDX01/primary_doc.xml')
+soup = BeautifulSoup(text.read(), "html.parser")
+
+
+class CompanyInfo(object):
+
+    def __init__(self, name, former_name, cik, entity_type, industry):
+        self.name = name
+        self.former_name = former_name
+        self.cik = cik
+        self.entity_type = entity_type
+        self.industry = industry
+
+
+class RelatedPerson (object):
+
+    def __init__(self, first_name, last_name, middle_name, relationship):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.middle_name = middle_name
+        self.relationship = relationship
+
+
+class ServiceProvider (object):
+
+    def __init__(self, SP_name):
+        self.SP_name = SP_name
+
+
+class RoundInfo (object):
+
+    def __init__(self, round_amount, remaining_amount, round_type, round_date, num_investors):
+        self.round_amount = round_amount
+        self.remaining_amount = remaining_amount
+        self.round_type = round_type
+        self.round_date = round_date
+        self.num_investors = num_investors
+
+
+def get_company_info(text):
+    co_info = text.find('table', {'summary': 'Issuer Identity Information'})
+    CIK_number = co_info.find_all('a')[0].text
+    former_name = co_info.find_all('td')[4].text
+    company = CompanyInfo('testName', former_name, CIK_number, 'test2', 'test3')
+
+    # print(co_info.find_all('td')[6])
+    print(company.former_name)
+
+get_company_info(soup)
