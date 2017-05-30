@@ -49,3 +49,6 @@ def get_company_info(text):
     print(company.former_name)
 
 get_company_info(soup)
+
+for i in range(1,101):
+    print(i)
